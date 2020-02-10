@@ -18,15 +18,46 @@ namespace WebAPI_ASP.NET_v2._10._20.Controllers
             }
         }
 
-
-        public Employee Get(int id)
+        // according to standard, when a request result is not found, should return 404
+        public HttpResponseMessage Get(int id)
         {
             using (EmployeeDBEntities entities = new EmployeeDBEntities())
             {
-                return entities.Employees.FirstOrDefault(e => e.ID == id);
+                var entity = entities.Employees.FirstOrDefault(e => e.ID == id);
+                if (entity != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, entity);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee with Id = " + id.ToString() + " not found");
+                }
             }
         }
 
+        // return void gives you status code 204 (no content); 
+        // according to rest standard, when an item created, should return 201(item created) and the uri (location)
+        public HttpResponseMessage Post([FromBody]Employee employee)   
+        {
+            try
+            {
+                using (EmployeeDBEntities entities = new EmployeeDBEntities())
+                {
+                    entities.Employees.Add(employee);
+                    entities.SaveChanges();
 
+                    var message = Request.CreateResponse(HttpStatusCode.Created, employee);
+                    message.Headers.Location = new Uri(Request.RequestUri + employee.ID.ToString());
+                    return message;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                
+            }
+
+        }
     }
 }
