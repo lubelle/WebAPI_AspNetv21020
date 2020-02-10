@@ -10,16 +10,34 @@ namespace WebAPI_ASP.NET_v2._10._20.Controllers
 {
     public class EmployeesController : ApiController
     {
-        public IEnumerable<Employee> Get()
+        
+        public HttpResponseMessage Get(string gender="all")
         {
+            var strGender = string.IsNullOrEmpty(gender) ? "all" : gender;
             using (EmployeeDBEntities entities = new EmployeeDBEntities())
             {
-                return entities.Employees.ToList();
+                switch (strGender.ToLower())
+                {
+                    case "male":
+                        return Request.CreateResponse(HttpStatusCode.OK, entities.Employees.Where(e => e.Gender.ToLower() == "male").ToList());
+                        
+                    case "female":
+                        return Request.CreateResponse(HttpStatusCode.OK, entities.Employees.Where(e => e.Gender.ToLower() == "female").ToList());
+
+                    case "all":
+                        return Request.CreateResponse(HttpStatusCode.OK, entities.Employees.ToList());
+
+                    default:
+
+                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Value for gender must be All, Male or Female." + gender + " is invalid");
+                }
+                
             }
         }
 
         // according to standard, when a request result is not found, should return 404
-        public HttpResponseMessage Get(int id)
+        [HttpGet]
+        public HttpResponseMessage LoadEmployeeById(int id)
         {
             using (EmployeeDBEntities entities = new EmployeeDBEntities())
             {
