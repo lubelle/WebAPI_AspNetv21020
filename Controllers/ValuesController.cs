@@ -9,31 +9,39 @@ namespace WebAPI_ASP.NET_v2._10._20.Controllers
 {
     public class ValuesController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        static List<string> strings = new List<string>
         {
-            return new string[] { "value1", "value2" };
+            "value0", "value1", "value2"
+        };
+        
+        public IEnumerable<string> GetFullList()
+        {
+            return strings;
         }
 
-        // GET api/values/5
-        public string Get(int id)
+        
+        public string GetValueById(int id)
         {
-            return "value";
+            return strings[id];
         }
 
-        // POST api/values
+        
         public void Post([FromBody]string value)
         {
+            strings.Add(value);
+            
         }
 
-        // PUT api/values/5
+        
         public void Put(int id, [FromBody]string value)
         {
+            strings[id] = value;
         }
 
-        // DELETE api/values/5
+        
         public void Delete(int id)
         {
+            strings.RemoveAt(id);
         }
     }
 }
