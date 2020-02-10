@@ -107,7 +107,9 @@ namespace WebAPI_ASP.NET_v2._10._20.Controllers
 
         }
 
-        public HttpResponseMessage Put(int id, [FromBody]Employee employee)
+        // by default, web api look for complex data type from request body; int, string... from request uri
+        // use [FromBody] and [FromUri] attributes to manipulate where the input parameters come from
+        public HttpResponseMessage Put([FromBody]int id, [FromUri]Employee employee)
         {
             try
             {
