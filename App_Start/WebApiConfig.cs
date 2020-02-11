@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace WebAPI_ASP.NET_v2._10._20
 {
@@ -37,6 +38,11 @@ namespace WebAPI_ASP.NET_v2._10._20
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.EnableCors();
+
+            //EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*");
+            //config.EnableCors(cors);
 
             //config.Formatters.Add(new CustomJsonFormatter());
 

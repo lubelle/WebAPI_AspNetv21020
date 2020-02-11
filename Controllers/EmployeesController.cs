@@ -4,10 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using EmployeeDataAccess;
 
 namespace WebAPI_ASP.NET_v2._10._20.Controllers
 {
+    [EnableCorsAttribute("*", "*", "*")]
     public class EmployeesController : ApiController
     {
         
@@ -78,6 +80,7 @@ namespace WebAPI_ASP.NET_v2._10._20.Controllers
 
         }
 
+        [DisableCors]
         public HttpResponseMessage Delete(int id)
         {
             try
